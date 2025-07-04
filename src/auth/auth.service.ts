@@ -65,7 +65,7 @@ export class AuthService {
         email: payload.email,
       },
       {
-        expiresIn: options.expiresIn ? options.expiresIn : '',
+        expiresIn: options.expiresIn ? options.expiresIn : '15m',
       },
     );
   }
