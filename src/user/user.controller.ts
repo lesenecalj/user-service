@@ -7,7 +7,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.gard';
-import { LoginDto } from 'src/dto/login.dto';
 import { SignupDto } from 'src/dto/signup.dto';
 import { UserService } from './user.service';
 
@@ -25,11 +24,6 @@ export class UserController {
   @Post('signup')
   signup(@Body() dto: SignupDto) {
     return this.userService.signup(dto);
-  }
-
-  @Post('login')
-  login(@Body() dto: LoginDto) {
-    return this.userService.login(dto);
   }
 
   @Get('me')
