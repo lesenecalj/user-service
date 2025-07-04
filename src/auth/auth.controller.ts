@@ -30,6 +30,17 @@ export class AuthController {
     return { access_token: accessToken };
   }
 
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('refresh_token', {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+    });
+
+    return { message: 'Logged out successfully' };
+  }
+
   @Post('refresh')
   refreskToken(@Req() req: RequestWithRefreshToken) {
     const refreshToken = req.cookies?.refresh_token;
