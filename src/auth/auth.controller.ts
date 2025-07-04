@@ -3,6 +3,12 @@ import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { LoginDto } from 'src/dto/login.dto';
 
+interface RequestWithRefreshToken extends Request {
+  cookies: {
+    refresh_token: string;
+  };
+}
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -25,11 +31,8 @@ export class AuthController {
   }
 
   @Post('refresh')
-  refreskToken(@Req() req: Request) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+  refreskToken(@Req() req: RequestWithRefreshToken) {
     const refreshToken = req.cookies?.refresh_token;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    console.log({ refreshToken });
     const { accessToken } = this.authService.refreshToken(refreshToken);
     return { access_token: accessToken };
   }
