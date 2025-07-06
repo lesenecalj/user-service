@@ -4,6 +4,7 @@ import { UserRepository } from '../src/user/user.repository';
 import { SignupDto } from 'src/dto/signup.dto';
 import { BadRequestException } from '@nestjs/common';
 import { User } from 'src/user/user.entity';
+import { v4 as uuidv4 } from 'uuid';
 
 describe('UserService', () => {
   let service: UserService;
@@ -35,7 +36,12 @@ describe('UserService', () => {
 
     it('should create a user if email is not registered', async () => {
       userRepository.getUserFromEmail.mockResolvedValue(null);
-      userRepository.save.mockResolvedValue(undefined);
+      userRepository.save.mockResolvedValue({
+        email: 'test@example.com',
+        password: 'securepassword',
+        createdAt: new Date(),
+        id: uuidv4(),
+      } as User);
 
       const result = await service.signup(signupDto);
 
