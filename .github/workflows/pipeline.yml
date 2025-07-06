@@ -11,8 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DB_USER: user-service
-      DB_NAME: users
+      DB_USER: ${{ secrets.DB_USER}}
+      DB_NAME: ${{ secrets.DB_NAME}}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD}}
+      DB_PORT: ${{ secrets.DB_PORT}}
+      DB_HOST: ${{ secrets.DB_HOST}}
+      JWT_SECRET: ${{ secrets.JWT_SECRET}}
+      PGADMIN_DEFAULT_EMAIL: ${{ secrets.PGADMIN_DEFAULT_EMAIL}}
+      PGADMIN_DEFAULT_PASSWORD: ${{ secrets.PGADMIN_DEFAULT_PASSWORD}}
 
     steps:
       - name: Checkout repository
