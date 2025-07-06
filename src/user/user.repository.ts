@@ -11,14 +11,14 @@ export class UserRepository {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async getUserFromEmail(email: string) {
+  async getUserFromEmail(email: string): Promise<User | null> {
     const existingUser = await this.userRepository.findOne({
       where: { email },
     });
     return existingUser;
   }
 
-  async save(dto: SignupDto) {
+  async save(dto: SignupDto): Promise<User> {
     const hashed = await bcrypt.hash(dto?.password, 10);
 
     const user = this.userRepository.create({
@@ -26,6 +26,6 @@ export class UserRepository {
       password: hashed,
     });
 
-    await this.userRepository.save(user);
+    return this.userRepository.save(user);
   }
 }
