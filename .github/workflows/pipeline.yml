@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    senv:
+    env:
       DB_USER: user-service
       DB_NAME: users
 
