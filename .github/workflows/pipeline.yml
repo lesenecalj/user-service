@@ -24,7 +24,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Set up Docker Compose
-        run: docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+        run: docker compose -f docker-compose.yml up
       - name: Wait for PostgreSQL
         run: |
           echo "Waiting for PostgreSQL to be ready..."
