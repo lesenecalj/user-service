@@ -9,7 +9,3 @@ services:
   postgres:
     env_file:
       - .env
-
-  pgadmin:
-    env_file:
-      - .env
