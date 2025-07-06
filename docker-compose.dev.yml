@@ -1,9 +1,11 @@
 services:
   user-service:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
+    env_file:
+      - .env
     volumes:
       - .:/app
-      - /app/node_modules
     command: npm run start:dev
+
+  postgres:
+    env_file:
+      - .env
