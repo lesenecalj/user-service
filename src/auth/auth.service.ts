@@ -3,17 +3,23 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
 import { LoginDto } from 'src/dto/login.dto';
 import { UserService } from 'src/user/user.service';
+import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
+  private logger;
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
-  ) {}
+  ) {
+    this.logger = new Logger('AuthService');
+  }
 
   async login(dto: LoginDto) {
+    this.logger.log(`Login attempt for ${dto.email}`);
     const user = await this.userService.getUserFromEmail(dto.email);
     if (!user) {
+      this.logger.error(`Invalid credentials for ${dto.email}`);
       throw new UnauthorizedException('Invalid credentials');
     }
     const isValidUser = await this.validatePassword(
@@ -22,24 +28,21 @@ export class AuthService {
     );
 
     if (!isValidUser) {
+      this.logger.error(`Invalid credentials for ${dto.email}`);
       throw new UnauthorizedException('Invalid credentials');
     }
 
     const accessToken = this.generateToken(
-      {
-        sub: user.id,
-        email: user.email,
-      },
+      { sub: user.id, email: user.email },
       { expiresIn: '15m' },
     );
 
     const refreshToken = this.generateToken(
-      {
-        sub: user.id,
-        email: user.email,
-      },
+      { sub: user.id, email: user.email },
       { expiresIn: '7d' },
     );
+
+    this.logger.log(`Tokens generated for ${dto.email}`);
 
     return {
       accessToken,
@@ -60,13 +63,8 @@ export class AuthService {
     options: JwtSignOptions,
   ): string {
     return this.jwtService.sign(
-      {
-        sub: payload.sub,
-        email: payload.email,
-      },
-      {
-        expiresIn: options.expiresIn ? options.expiresIn : '15m',
-      },
+      { sub: payload.sub, email: payload.email },
+      { expiresIn: options.expiresIn ? options.expiresIn : '15m' },
     );
   }
 
@@ -76,10 +74,11 @@ export class AuthService {
     try {
       const payload: { sub: string; email: string } =
         this.jwtService.verify(token);
+      this.logger.log(`Refresh token for ${payload.email}`);
       const accessToken = this.generateToken(payload, { expiresIn: '15m' });
       return { accessToken };
     } catch (error) {
-      console.log({ error });
+      this.logger.error(error);
       throw new UnauthorizedException('Invalid refresh token');
     }
   }
