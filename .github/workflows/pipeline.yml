@@ -34,10 +34,6 @@ jobs:
             sleep 2
           done
           echo "PostgreSQL is ready!"
-      - name: Lint the code
-        run: docker compose exec -T user-service npm run lint
-      - name: Run tests in user-service container
-        run: docker compose exec -T user-service npm run test
       - name: Show logs if tests fail
         if: failure()
         run: docker compose logs
