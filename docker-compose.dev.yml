@@ -1,11 +1,11 @@
 services:
   user-service:
     env_file:
-      - .env
+      - .env.local
     volumes:
       - .:/app
     command: npm run start:dev
 
   postgres:
     env_file:
-      - .env
+      - .env.local
