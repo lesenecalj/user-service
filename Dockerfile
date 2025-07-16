@@ -14,7 +14,6 @@ RUN npm run lint
 
 RUN npm run test
 
-
 FROM node:20-alpine
 
 WORKDIR /app

@@ -9,6 +9,8 @@ async function bootstrap() {
   app.use(helmet());
   app.use(cookieParser());
 
+  // todo: implements swagger.
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
