@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/lesenecalj/user-service/compare/v1.0.1...v1.0.2) (2025-07-23)
+
+
+### Bug Fixes
+
+* **readme:** update readme.md ([84f6a28](https://github.com/lesenecalj/user-service/commit/84f6a28e724afba35d8e01bb402245d368d2bc2d))
+
 ## [1.0.1](https://github.com/lesenecalj/user-service/compare/v1.0.0...v1.0.1) (2025-07-23)
 
 
