@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from '../src/user/user.service';
 import { UserRepository } from '../src/user/user.repository';
-import { SignupDto } from 'src/dto/signup.dto';
+import { InputSignupDto } from 'src/dto/input.signup.dto';
 import { BadRequestException } from '@nestjs/common';
 import { User } from 'src/user/user.entity';
 import { v4 as uuidv4 } from 'uuid';
@@ -29,7 +29,7 @@ describe('UserService', () => {
   });
 
   describe('signup', () => {
-    const signupDto: SignupDto = {
+    const signupDto: InputSignupDto = {
       email: 'test@example.com',
       password: 'securepassword',
     };
