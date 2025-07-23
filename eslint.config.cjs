@@ -8,6 +8,8 @@ module.exports = [
     ignores: ['eslint.config.cjs', 'release.config.js'],
   },
   eslint.configs.recommended,
+  ...tseslint.configs.recommended,
+
   ...tseslint.configs.recommendedTypeChecked,
   prettierRecommended,
   {
