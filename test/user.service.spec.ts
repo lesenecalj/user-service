@@ -5,6 +5,7 @@ import { InputSignupDto } from 'src/dto/input.signup.dto';
 import { BadRequestException } from '@nestjs/common';
 import { User } from 'src/user/user.entity';
 import { v4 as uuidv4 } from 'uuid';
+import { OutputSignupDto } from 'src/dto/output.signup.dto';
 
 describe('UserService', () => {
   let service: UserService;
@@ -36,11 +37,14 @@ describe('UserService', () => {
 
     it('should create a user if email is not registered', async () => {
       userRepository.getUserFromEmail.mockResolvedValue(null);
-      userRepository.save.mockResolvedValue({
+      const createdUserOutput: OutputSignupDto = {
         email: 'test@example.com',
-        password: 'securepassword',
-        createdAt: new Date(),
         id: uuidv4(),
+        password: 'securepassword',
+      };
+      userRepository.save.mockResolvedValue({
+        ...createdUserOutput,
+        createdAt: new Date(),
       } as User);
 
       const result = await service.signup(signupDto);
@@ -49,7 +53,7 @@ describe('UserService', () => {
         signupDto.email,
       );
       expect(userRepository.save).toHaveBeenCalledWith(signupDto);
-      expect(result).toEqual({ message: 'User has been created' });
+      expect(result).toEqual(createdUserOutput);
     });
 
     it('should throw BadRequestException if email already exists', async () => {
