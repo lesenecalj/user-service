@@ -5,7 +5,7 @@ const prettierRecommended = require('eslint-plugin-prettier/recommended');
 
 module.exports = [
   {
-    ignores: ['eslint.config.cjs'],
+    ignores: ['eslint.config.cjs', 'release.config.js'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
