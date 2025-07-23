@@ -1,6 +1,13 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { SignupDto } from 'src/dto/signup.dto';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import { InputSignupDto } from 'src/dto/input.signup.dto';
 import { UserRepository } from './user.repository';
+import { OutputSignupDto } from 'src/dto/output.signup.dto';
+import { User } from './user.entity';
 
 @Injectable()
 export class UserService {
@@ -9,7 +16,7 @@ export class UserService {
     this.logger = new Logger('UserService');
   }
 
-  async signup(dto: SignupDto) {
+  async signup(dto: InputSignupDto): Promise<OutputSignupDto> {
     this.logger.log(`Sign up for ${dto.email}`);
     const existingUser = await this.userRepository.getUserFromEmail(dto?.email);
 
@@ -18,13 +25,15 @@ export class UserService {
       throw new BadRequestException('Email already registered');
     }
 
-    await this.userRepository.save(dto);
-
-    return { message: 'User has been created' };
+    const user = await this.userRepository.save(dto);
+    return OutputSignupDto.fromEntity(user);
   }
 
-  async getUserFromEmail(email: string) {
+  async getUserFromEmail(email: string): Promise<User> {
     const existingUser = await this.userRepository.getUserFromEmail(email);
+    if (!existingUser) {
+      throw new NotFoundException(`email ${email} wasn't found`);
+    }
     return existingUser;
   }
 }

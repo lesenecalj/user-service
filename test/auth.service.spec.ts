@@ -1,7 +1,7 @@
 import { AuthService } from '../src/auth/auth.service';
 import { UserService } from '../src/user/user.service';
 import { User } from '../src/user/user.entity';
-import { UnauthorizedException } from '@nestjs/common';
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 describe('AuthService', () => {
@@ -60,8 +60,10 @@ describe('AuthService', () => {
   });
 
   it('should throw if user not found', async () => {
-    userService.getUserFromEmail.mockResolvedValue(null);
-
+    // userService.getUserFromEmail.mockResolvedValue(null);
+    userService.getUserFromEmail.mockRejectedValue(
+      new NotFoundException('user not found'),
+    );
     await expect(
       authService.login({
         email: 'wrong@email.com',
